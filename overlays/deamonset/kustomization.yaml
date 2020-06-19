@@ -1,0 +1,39 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: nginx-ingress
+resources:
+- nodeport.yaml
+- docker-registry-secret.yaml
+- nginx-plus-ingress.yaml
+configMapGenerator:
+- name: nginx-config
+  envs: 
+  - kust-nginx-config.env
+secretGenerator:
+- name: default-server-secret
+  files: 
+    - tls.crt
+    - tls.key
+vars:
+  - name: NGINX_CONFIG
+    objref:
+      kind: ConfigMap
+      name: nginx-config
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name
+  - name: NGINX_SERVER_SECRET
+    objref:
+      kind: Secret
+      name: default-server-secret
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name
+patchesJson6902:
+- target:
+    group: apps
+    version: v1
+    kind: DaemonSet
+    name: nginx-ingress
+    namespace: nginx-ingress
+  path: kust-json-patch.yaml

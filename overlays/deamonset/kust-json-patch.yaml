@@ -1,0 +1,10 @@
+- op: replace
+  path: /spec/template/spec/containers/0/args/1
+  value: -nginx-configmaps=$(POD_NAMESPACE)/$(NGINX_CONFIG)
+- op: replace
+  path: /spec/template/spec/containers/0/args/2
+  value: -default-server-tls-secret=$(POD_NAMESPACE)/$(NGINX_SERVER_SECRET)
+- op: add
+  path: /spec/template/spec/imagePullSecrets
+  value:   
+      - name: docker-registry-secret
