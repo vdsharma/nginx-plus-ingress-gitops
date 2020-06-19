@@ -24,7 +24,7 @@ spec:
                   - key: metadata.name
                     operator: In
                     values:
-                      - kubwkrnceunxq01
+                      - kubeworkernode1
       containers:
       - image: customregistry/nginx-plus-ingress:1.6.3
         name: nginx-plus-ingress
